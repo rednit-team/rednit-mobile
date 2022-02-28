@@ -7,4 +7,7 @@
     <string name="menu_settings">Settings</string>
     <string name="account_menu">Account</string>
     <string name="menu_notifications">Notifications</string>
+    <string name="login">Login</string>
+    <string name="hint_password">X-Auth-Token</string>
+    <string name="get_token">How do I get a X-Auth-Token?</string>
 </resources>

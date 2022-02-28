@@ -2,7 +2,6 @@ package com.github.rednit
 
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.github.rednit.databinding.ActivityMainBinding
@@ -17,7 +16,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.elevation = 0f
-
         val historyFragment = HistoryFragment()
         val likeFragment = LikeFragment()
         val swipeFragment = SwipeFragment()
@@ -27,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         setFragment(swipeFragment)
         binding.bottomNavigation.selectedItemId = R.id.ic_swipe
 
-        binding.bottomNavigation.setOnItemSelectedListener() {
+        binding.bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.ic_history -> setFragment(historyFragment)
                 R.id.ic_likes -> setFragment(likeFragment)
