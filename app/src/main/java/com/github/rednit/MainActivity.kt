@@ -1,7 +1,8 @@
 package com.github.rednit
 
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.github.rednit.databinding.ActivityMainBinding
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.elevation = 0f
 
         val historyFragment = HistoryFragment()
         val likeFragment = LikeFragment()
@@ -35,6 +37,12 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.notifications_menu, menu)
+        menuInflater.inflate(R.menu.account_menu, menu)
+        return true
     }
 
     private fun setFragment(fragment: Fragment) =

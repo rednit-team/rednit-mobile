@@ -2,8 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary">#FD5365</color>
-    <color name="primaryVariant">#424242</color>
-    <color name="secondary">#FF5864</color>
-    <color name="secondaryVariant">#FFFFFFFF</color>
+    <color name="primary">#1c1b1f</color>
+    <color name="primaryVariant">#49454f</color>
+    <color name="secondary">#f2b8b5</color>
+    <color name="secondaryVariant">#d0bcff</color>
+    <color name="appbar">#2b2831</color>
+    <color name="text">#CAC4D0</color>
+    <color name="icon_selected">#4A4458</color>
 </resources>
