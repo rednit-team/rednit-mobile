@@ -5,7 +5,11 @@ import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.github.rednit.databinding.ActivityMainBinding
-import com.github.rednit.fragments.*
+import com.github.rednit.fragments.ChatFragment
+import com.github.rednit.fragments.HistoryFragment
+import com.github.rednit.fragments.SettingsFragment
+import com.github.rednit.fragments.SwipeFragment
+import com.github.rednit.likes.LikeFragment
 
 class MainActivity : AppCompatActivity() {
 

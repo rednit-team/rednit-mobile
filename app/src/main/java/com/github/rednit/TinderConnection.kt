@@ -9,7 +9,7 @@ object TinderConnection {
     lateinit var client: TinderClient
     var token: String = ""
 
-     fun login(): Boolean {
+    fun login(): Boolean {
         if (token.isBlank()) {
             return false
         }
