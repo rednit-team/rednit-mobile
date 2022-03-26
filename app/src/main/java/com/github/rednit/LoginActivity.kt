@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.github.rednit.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
@@ -13,9 +14,11 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
+    lateinit var binding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.elevation = 0f
 
@@ -23,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
         TinderConnection.token = sharedPreferences.getString("token", "").toString()
 
+        switchLogin(true)
         Thread {
             if (TinderConnection.login()) {
                 runOnUiThread {
@@ -34,6 +38,10 @@ class LoginActivity : AppCompatActivity() {
                             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     )
                 }
+            } else {
+                runOnUiThread {
+                    switchLogin(false)
+                }
             }
         }.start()
 
@@ -41,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
             val token = binding.inputPassword.text.toString()
             TinderConnection.token = token
 
+            switchLogin(true)
             Thread {
                 if (TinderConnection.login()) {
                     sharedPreferences.edit().putString("token", token).apply()
@@ -55,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 } else {
                     runOnUiThread {
+                        switchLogin(false)
                         Toast.makeText(
                             applicationContext,
                             "Invalid X-Auth-Token!",
@@ -75,6 +85,17 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun switchLogin(active: Boolean) {
+        if (active) {
+            binding.progressBar.isVisible = true
+            binding.buttonLogin.isEnabled = false
+            binding.layoutLogin.alpha = 0.5f
+        } else {
+            binding.progressBar.isVisible = false
+            binding.buttonLogin.isEnabled = true
+            binding.layoutLogin.alpha = 1.0f
+        }
+    }
 
 }
 
