@@ -1,18 +1,23 @@
 package com.github.rednit.likes
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.rednit.R
 import com.github.rednit.TinderConnection
 import com.github.rednit.databinding.FragmentLikeBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.URL
 
 
 class LikeFragment : Fragment() {
@@ -30,21 +35,35 @@ class LikeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val policy = ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = GridLayoutManager(context, 2)
-        recyclerView.adapter = LikeAdapter()
+        val adapter = LikeAdapter()
+        recyclerView.adapter = adapter
 
+        val connection = TinderConnection.connection
 
-        val likeCount = TinderConnection.client.likeCount.complete()
+        lifecycleScope.launch {
+            val likePreviews = withContext(Dispatchers.IO) { connection.likePreviews() }
+            val photos = mutableListOf<Bitmap>()
+            withContext(Dispatchers.IO) {
+                likePreviews.reversed().stream().map { entry ->
+                    entry.photos[0].processedFiles.stream().filter {
+                        it.height == 800
+                    }.findFirst().get()
+                }.forEach {
+                    photos.add(BitmapFactory.decodeStream(URL(it.url).openStream()))
+                }
+            }
 
-        if (likeCount < 10) {
-            binding.textLikeCount.isVisible = false
-        } else {
-            binding.textLikeCount.text = getString(R.string.like_count_text).format(likeCount)
+            adapter.updateContent(photos)
+
+            val teaserCount = withContext(Dispatchers.IO) { connection.teaserCount() }
+
+            if (teaserCount < 10) {
+                binding.textLikeCount.isVisible = false
+            } else {
+                binding.textLikeCount.text = getString(R.string.like_count_text).format(teaserCount)
+            }
         }
-
     }
-
 }

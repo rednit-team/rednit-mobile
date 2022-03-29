@@ -7,7 +7,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.github.rednit.databinding.ActivityLoginBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class LoginActivity : AppCompatActivity() {
@@ -22,66 +26,55 @@ class LoginActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("rednit", Context.MODE_PRIVATE)
 
-        TinderConnection.token = sharedPreferences.getString("token", "").toString()
+        val connection = TinderConnection.connection
+        connection.token = sharedPreferences.getString("token", "").toString()
 
         switchLogin(true)
-        Thread {
-            if (TinderConnection.login()) {
-                runOnUiThread {
-                    applicationContext.startActivity(
-                        Intent(
-                            applicationContext,
-                            MainActivity::class.java
-                        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    )
-                }
+
+        lifecycleScope.launch {
+            if (withContext(Dispatchers.IO) { connection.login() }) {
+                applicationContext.startActivity(
+                    Intent(applicationContext, MainActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                )
             } else {
-                runOnUiThread {
-                    switchLogin(false)
-                }
+                switchLogin(false)
             }
-        }.start()
+        }
 
         binding.buttonLogin.setOnClickListener {
             val token = binding.inputPassword.text.toString()
-            TinderConnection.token = token
-
+            TinderConnection.connection.token = token
             switchLogin(true)
-            Thread {
-                if (TinderConnection.login()) {
+
+            lifecycleScope.launch {
+                if (TinderConnection.connection.login()) {
                     sharedPreferences.edit().putString("token", token).apply()
-                    runOnUiThread {
-                        applicationContext.startActivity(
-                            Intent(
-                                applicationContext,
-                                MainActivity::class.java
-                            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        )
-                    }
+                    applicationContext.startActivity(
+                        Intent(applicationContext, MainActivity::class.java)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    )
                 } else {
-                    runOnUiThread {
-                        switchLogin(false)
-                        Toast.makeText(
-                            applicationContext,
-                            "Invalid X-Auth-Token!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    switchLogin(false)
+                    Toast.makeText(
+                        applicationContext,
+                        "Invalid X-Auth-Token!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            }.start()
+            }
         }
 
         binding.textGetToken.setOnClickListener {
             applicationContext.startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://rednit.stoplight.io/docs/tinder-api/ZG9jOjIyMTk3ODgx-authentication")
-                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.wiki_token)))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         }
     }
+
 
     private fun switchLogin(active: Boolean) {
         if (active) {
