@@ -16,6 +16,8 @@ class TinderConnection : ViewModel() {
 
     private lateinit var client: TinderClient
     private var likePreviews = emptyList<LikePreview>()
+    private var teaserCount = 0
+    private var teaserCountFetched = false
     private var likePreviewsFetched = false
 
     fun login(): Boolean {
@@ -33,13 +35,16 @@ class TinderConnection : ViewModel() {
     }
 
     fun teaserCount(): Int {
-        return client.likeCount.complete()
+        if (!teaserCountFetched) {
+            teaserCount = client.likeCount.complete()
+            teaserCountFetched = true
+        }
+        return teaserCount
     }
 
     // 10 is the maximum amount of teasers the api sends
     fun likePreviewCount(): Int {
-        return if (!likePreviewsFetched) 10 else 5
-        //return if (!likePreviewsFetched) 10 else likePreviews.size
+        return if (!likePreviewsFetched) 10 else likePreviews.size
     }
 
     fun likePreviews(): List<LikePreview> {

@@ -24,6 +24,7 @@ class LikeFragment : Fragment() {
 
     private lateinit var binding: FragmentLikeBinding
     private lateinit var recyclerView: RecyclerView
+    private var photos = mutableListOf<Bitmap>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,9 +44,8 @@ class LikeFragment : Fragment() {
         val connection = TinderConnection.connection
 
         lifecycleScope.launch {
-            val likePreviews = withContext(Dispatchers.IO) { connection.likePreviews() }
-            val photos = mutableListOf<Bitmap>()
-            withContext(Dispatchers.IO) {
+            if (photos.isEmpty()) withContext(Dispatchers.IO) {
+                val likePreviews = withContext(Dispatchers.IO) { connection.likePreviews() }
                 likePreviews.reversed().stream().map { entry ->
                     entry.photos[0].processedFiles.stream().filter {
                         it.height == 800
@@ -56,6 +56,8 @@ class LikeFragment : Fragment() {
             }
 
             adapter.updateContent(photos)
+
+            binding.progressBar.isVisible = false
 
             val teaserCount = withContext(Dispatchers.IO) { connection.teaserCount() }
 
