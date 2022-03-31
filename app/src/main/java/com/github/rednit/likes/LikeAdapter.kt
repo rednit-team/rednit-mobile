@@ -77,7 +77,12 @@ class LikeAdapter : RecyclerView.Adapter<LikeAdapter.LikeViewHolder>() {
 
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
 
-                val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, System.currentTimeMillis().toString(), null)
+                val path = MediaStore.Images.Media.insertImage(
+                    context.contentResolver,
+                    bitmap,
+                    System.currentTimeMillis().toString(),
+                    null
+                )
 
                 val uri = Uri.parse(path)
 
