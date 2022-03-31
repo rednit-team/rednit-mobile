@@ -5,12 +5,16 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.github.rednit.databinding.ActivityMainBinding
 import com.github.rednit.fragments.ChatFragment
 import com.github.rednit.fragments.HistoryFragment
 import com.github.rednit.fragments.SettingsFragment
 import com.github.rednit.fragments.SwipeFragment
 import com.github.rednit.likes.LikeFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,6 +43,19 @@ class MainActivity : AppCompatActivity() {
                 R.id.ic_settings -> setFragment(settingsFragment)
             }
             true
+        }
+
+        lifecycleScope.launch {
+            val teaserCount =
+                withContext(Dispatchers.IO) { TinderConnection.connection.teaserCount() }
+            if (teaserCount > 0) {
+                val badge = binding.bottomNavigation.getOrCreateBadge(R.id.ic_likes)
+                badge.number = teaserCount
+                badge.verticalOffset = 15
+                badge.horizontalOffset = 15
+                badge.backgroundColor = getColor(R.color.secondary)
+                badge.badgeTextColor = getColor(R.color.badgeText)
+            }
         }
 
         requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)

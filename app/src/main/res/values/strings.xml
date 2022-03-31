@@ -10,6 +10,6 @@
     <string name="login">Login</string>
     <string name="hint_password">X-Auth-Token</string>
     <string name="get_token">How do I get a X-Auth-Token?</string>
-    <string name="like_count_text">And %s additional users</string>
+    <string name="like_count_text">And %s additional users Tinder doesn\'t display</string>
     <string name="wiki_token">"https://rednit.stoplight.io/docs/tinder-api/ZG9jOjIyMTk3ODgx-authentication"</string>
 </resources>

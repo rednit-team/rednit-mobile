@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.github.rednit.R
 import com.github.rednit.TinderConnection
 import com.github.rednit.databinding.FragmentLikeBinding
 import kotlinx.coroutines.Dispatchers
@@ -65,14 +64,6 @@ class LikeFragment : Fragment() {
             adapter.updateContent(photos)
 
             binding.progressBar.isVisible = false
-
-            val teaserCount = withContext(Dispatchers.IO) { connection.teaserCount() }
-
-            if (teaserCount < 10) {
-                binding.textLikeCount.isVisible = false
-            } else {
-                binding.textLikeCount.text = getString(R.string.like_count_text).format(teaserCount)
-            }
         }
     }
 }

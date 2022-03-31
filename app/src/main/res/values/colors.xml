@@ -8,5 +8,6 @@
     <color name="secondaryVariant">#d0bcff</color>
     <color name="appbar">#2b2831</color>
     <color name="text">#CAC4D0</color>
+    <color name="badgeText">#601410</color>
     <color name="icon_selected">#4A4458</color>
 </resources>
