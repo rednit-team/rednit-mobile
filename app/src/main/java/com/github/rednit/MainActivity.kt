@@ -1,8 +1,10 @@
 package com.github.rednit
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +17,7 @@ import com.github.rednit.likes.LikeFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.CompletionException
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,6 +58,21 @@ class MainActivity : AppCompatActivity() {
                 badge.horizontalOffset = 15
                 badge.backgroundColor = getColor(R.color.secondary)
                 badge.badgeTextColor = getColor(R.color.badgeText)
+            }
+        }
+
+        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+            if (throwable is CompletionException) {
+                Toast.makeText(
+                    applicationContext,
+                    "Your X-Auth-Token expired!", Toast.LENGTH_LONG
+                ).show()
+
+                applicationContext.startActivity(
+                    Intent(applicationContext, LoginActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                )
             }
         }
 
