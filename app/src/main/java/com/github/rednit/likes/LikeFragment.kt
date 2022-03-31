@@ -3,9 +3,12 @@ package com.github.rednit.likes
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.allViews
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +27,9 @@ class LikeFragment : Fragment() {
 
     private lateinit var binding: FragmentLikeBinding
     private lateinit var recyclerView: RecyclerView
-    private var photos = mutableListOf<Bitmap>()
+    private var photos = mutableListOf<Photo>()
+
+    data class Photo(val url: String, val image: Bitmap)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,23 +40,42 @@ class LikeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menu.add ("Open")
+        menu.add ("Share")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = GridLayoutManager(context, 2)
         val adapter = LikeAdapter()
         recyclerView.adapter = adapter
 
+        recyclerView.allViews.iterator().forEachRemaining { entry ->
+            entry.setOnClickListener {
+                Log.w("test", "yooo")
+            }
+        }
+
         val connection = TinderConnection.connection
 
         lifecycleScope.launch {
             if (photos.isEmpty()) withContext(Dispatchers.IO) {
                 val likePreviews = withContext(Dispatchers.IO) { connection.likePreviews() }
-                likePreviews.reversed().stream().map { entry ->
-                    entry.photos[0].processedFiles.stream().filter {
-                        it.height == 800
+                likePreviews.reversed().stream().forEach{
+                    val url = it.photos[0].url
+                    val sizedImage = it.photos[0].processedFiles.stream().filter { sizedImage ->
+                        sizedImage.height == 800
                     }.findFirst().get()
-                }.forEach {
-                    photos.add(BitmapFactory.decodeStream(URL(it.url).openStream()))
+                    photos.add(Photo(
+                        url,
+                        BitmapFactory.decodeStream(URL(sizedImage.url).openStream())
+                    ))
                 }
             }
 

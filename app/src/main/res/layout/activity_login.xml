@@ -25,6 +25,7 @@
             android:hint="@string/hint_password"
             android:textColorHint="@color/text"
             app:endIconMode="password_toggle"
+            app:passwordToggleEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.476"
             app:layout_constraintStart_toStartOf="parent"

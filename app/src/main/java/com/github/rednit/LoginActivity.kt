@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
             switchLogin(true)
 
             lifecycleScope.launch {
-                if (TinderConnection.connection.login()) {
+                if (withContext(Dispatchers.IO) { connection.login() }) {
                     sharedPreferences.edit().putString("token", token).apply()
                     applicationContext.startActivity(
                         Intent(applicationContext, MainActivity::class.java)
