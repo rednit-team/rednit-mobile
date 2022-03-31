@@ -34,6 +34,11 @@ class TinderConnection : ViewModel() {
 
     }
 
+    fun resetCache() {
+        teaserCountFetched = false
+        likePreviewsFetched = false
+    }
+
     fun teaserCount(): Int {
         if (!teaserCountFetched) {
             teaserCount = client.likeCount.complete()
@@ -42,9 +47,8 @@ class TinderConnection : ViewModel() {
         return teaserCount
     }
 
-    // 10 is the maximum amount of teasers the api sends
     fun likePreviewCount(): Int {
-        return if (!likePreviewsFetched) 10 else likePreviews.size
+        return if (!likePreviewsFetched) 0 else likePreviews.size
     }
 
     fun likePreviews(): List<LikePreview> {

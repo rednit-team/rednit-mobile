@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.rednit.R
 import com.github.rednit.TinderConnection
 import com.github.rednit.databinding.FragmentLikeBinding
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,8 @@ class LikeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLikeBinding.inflate(inflater, container, false)
+        binding.refreshLayout.setColorSchemeResources(R.color.primary)
+        binding.refreshLayout.setProgressBackgroundColorSchemeColor(requireContext().getColor(R.color.text))
         return binding.root
     }
 
@@ -68,6 +71,17 @@ class LikeFragment : Fragment() {
             }
 
             binding.progressBar.isVisible = false
+            binding.refreshLayout.isRefreshing = false
+        }
+
+
+        binding.refreshLayout.setOnRefreshListener {
+            photos.clear()
+            connection.resetCache()
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.container, LikeFragment())
+                commit()
+            }
         }
     }
 }

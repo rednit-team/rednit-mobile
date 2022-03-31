@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setFragment(fragment: Fragment) =
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fl_wrapper, fragment)
+            replace(R.id.container, fragment)
             commit()
         }
 }

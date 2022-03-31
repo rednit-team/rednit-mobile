@@ -10,11 +10,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="invisible"
-        android:text="@string/no_likes"/>
+        android:text="@string/no_likes"
+        android:visibility="invisible" />
 
-    <RelativeLayout
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/secondaryVariant"
+        android:indeterminateTintMode="src_atop"
+        android:visibility="visible" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="wrap_content"
+
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -24,16 +36,6 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/secondaryVariant"
-            android:indeterminateTintMode="src_atop"
-            android:visibility="visible" />
-    </RelativeLayout>
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>
