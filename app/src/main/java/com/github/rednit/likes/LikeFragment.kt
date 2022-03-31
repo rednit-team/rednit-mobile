@@ -63,6 +63,10 @@ class LikeFragment : Fragment() {
 
             adapter.updateContent(photos)
 
+            if (photos.isEmpty()) {
+                binding.textNoLikes.isVisible = true
+            }
+
             binding.progressBar.isVisible = false
         }
     }

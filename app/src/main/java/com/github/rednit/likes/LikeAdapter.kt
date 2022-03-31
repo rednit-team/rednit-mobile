@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.github.rednit.R
 import com.github.rednit.TinderConnection
@@ -36,13 +35,8 @@ class LikeAdapter : RecyclerView.Adapter<LikeAdapter.LikeViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateContent(newPhotos: List<LikeFragment.Photo>) {
-        photos = newPhotos
-
-        for (i in newPhotos.size..10) {
-            notifyItemRemoved(i)
-        }
-
+    fun updateContent(photos: List<LikeFragment.Photo>) {
+        this.photos = photos
         notifyDataSetChanged()
     }
 
