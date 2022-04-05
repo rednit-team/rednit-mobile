@@ -3,6 +3,7 @@ package com.github.rednit
 import androidx.lifecycle.ViewModel
 import com.rednit.tinder4j.api.TinderClient
 import com.rednit.tinder4j.api.entities.user.LikePreview
+import com.rednit.tinder4j.api.entities.user.swipeable.Recommendation
 import com.rednit.tinder4j.exceptions.LoginException
 
 
@@ -32,6 +33,10 @@ class TinderConnection : ViewModel() {
         }
         return true
 
+    }
+
+    fun recommendations(): List<Recommendation> {
+        return client.recommendations.complete()
     }
 
     fun resetCache() {

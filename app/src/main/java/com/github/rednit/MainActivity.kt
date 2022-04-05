@@ -12,7 +12,7 @@ import com.github.rednit.databinding.ActivityMainBinding
 import com.github.rednit.fragments.ChatFragment
 import com.github.rednit.fragments.HistoryFragment
 import com.github.rednit.fragments.SettingsFragment
-import com.github.rednit.fragments.SwipeFragment
+import com.github.rednit.swipe.SwipeFragment
 import com.github.rednit.likes.LikeFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
