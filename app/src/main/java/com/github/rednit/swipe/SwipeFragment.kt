@@ -1,8 +1,6 @@
 package com.github.rednit.swipe
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +10,14 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.DiffUtil
 import com.github.rednit.TinderConnection
 import com.github.rednit.databinding.FragmentSwipeBinding
+import com.github.rednit.util.ImageUtil
+import com.rednit.tinder4j.api.entities.user.swipeable.Recommendation
 import com.yuyakaido.android.cardstackview.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.net.URL
 
 class SwipeFragment : Fragment(), CardStackListener {
 
@@ -45,45 +42,26 @@ class SwipeFragment : Fragment(), CardStackListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = CardStackAdapter()
+        adapter = CardStackAdapter(ImageUtil(this))
         setupCardStackView()
 
         lifecycleScope.launch {
-            val cards = mutableListOf<CardStackAdapter.Card>()
-            withContext(Dispatchers.IO) { cards.addAll(fetchUsers()) }
-            adapter.updateCards(cards)
+            val photos = mutableListOf<Recommendation>()
+            withContext(Dispatchers.IO) { photos.addAll(connection.recommendations()) }
+            adapter.updateContent(photos)
             binding.cardStackView.isVisible = true
             binding.progressBar.isVisible = false
         }
     }
 
-    private suspend fun fetchUsers(): List<CardStackAdapter.Card> {
-        val result = mutableListOf<CardStackAdapter.Card>()
-        withContext(Dispatchers.IO) {
-            connection.recommendations().forEach {
-                result.add(
-                    CardStackAdapter.Card(
-                        it,
-                        bitmap = BitmapFactory.decodeStream(
-                            URL(it.photos[0].url).openStream()
-                        )
-                    )
-                )
-            }
-        }
-        return result
-    }
-
-
     override fun onCardSwiped(direction: Direction) {
         if (manager.topPosition == adapter.getCards().size) {
             binding.cardStackView.isVisible = false
             binding.progressBar.isVisible = true
-
             lifecycleScope.launch {
-                val cards = mutableListOf<CardStackAdapter.Card>()
-                withContext(Dispatchers.IO) { cards.addAll(fetchUsers()) }
-                adapter.updateCards(cards)
+                val photos = mutableListOf<Recommendation>()
+                withContext(Dispatchers.IO) { photos.addAll(connection.recommendations()) }
+                adapter.updateContent(photos)
                 binding.cardStackView.isVisible = true
                 binding.progressBar.isVisible = false
             }
@@ -91,8 +69,8 @@ class SwipeFragment : Fragment(), CardStackListener {
     }
 
     private fun setupCardStackView() {
-        manager.setStackFrom(StackFrom.None)
-        manager.setVisibleCount(3)
+        manager.setStackFrom(StackFrom.Top)
+        manager.setVisibleCount(5)
         manager.setTranslationInterval(8.0f)
         manager.setScaleInterval(0.95f)
         manager.setSwipeThreshold(0.3f)
@@ -108,17 +86,6 @@ class SwipeFragment : Fragment(), CardStackListener {
             if (this is DefaultItemAnimator) {
                 supportsChangeAnimations = false
             }
-        }
-    }
-
-    private fun paginate() {
-        runBlocking {
-            val old = adapter.getCards()
-            val new = old.plus(fetchUsers())
-            val callback = CardDiffCallback(old, new)
-            val result = DiffUtil.calculateDiff(callback)
-            adapter.updateCards(new)
-            result.dispatchUpdatesTo(adapter)
         }
     }
 

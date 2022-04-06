@@ -1,7 +1,5 @@
 package com.github.rednit.likes
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,19 +12,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.rednit.R
 import com.github.rednit.TinderConnection
 import com.github.rednit.databinding.FragmentLikeBinding
+import com.github.rednit.util.ImageUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.net.URL
-
 
 class LikeFragment : Fragment() {
 
     private lateinit var binding: FragmentLikeBinding
     private lateinit var recyclerView: RecyclerView
-    private var photos = mutableListOf<Photo>()
-
-    data class Photo(val url: String, val image: Bitmap)
+    private var photos = mutableListOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,26 +37,15 @@ class LikeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = GridLayoutManager(context, 2)
-        val adapter = LikeAdapter()
+        val adapter = LikeAdapter(ImageUtil(this))
         recyclerView.adapter = adapter
 
         val connection = TinderConnection.connection
 
         lifecycleScope.launch {
             if (photos.isEmpty()) withContext(Dispatchers.IO) {
-                val likePreviews = withContext(Dispatchers.IO) { connection.likePreviews() }
-                likePreviews.stream().forEach {
-                    val url = it.photos[0].url
-                    val sizedImage = it.photos[0].processedFiles.stream().filter { sizedImage ->
-                        sizedImage.height == 800
-                    }.findFirst().get()
-                    photos.add(
-                        Photo(
-                            url,
-                            BitmapFactory.decodeStream(URL(sizedImage.url).openStream())
-                        )
-                    )
-                }
+                val likePreviews = connection.likePreviews()
+                likePreviews.stream().forEach { photos.add(it.photos[0].url) }
             }
 
             adapter.updateContent(photos)
@@ -73,7 +57,6 @@ class LikeFragment : Fragment() {
             binding.progressBar.isVisible = false
             binding.refreshLayout.isRefreshing = false
         }
-
 
         binding.refreshLayout.setOnRefreshListener {
             photos.clear()

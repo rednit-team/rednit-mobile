@@ -1,7 +1,6 @@
 package com.github.rednit.swipe
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.rednit.R
+import com.github.rednit.util.ImageUtil
 import com.rednit.tinder4j.api.entities.user.swipeable.Recommendation
 
-class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
+class CardStackAdapter(val imageUtil: ImageUtil) :
+    RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
 
-    data class Card(
-        val user: Recommendation,
-        val bitmap: Bitmap
-    )
-
-    private var cards = listOf<Card>()
+    private var cards = listOf<Recommendation>()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.text_name)
@@ -32,12 +28,12 @@ class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateCards(cards: List<Card>) {
+    fun updateContent(cards: List<Recommendation>) {
         this.cards = cards
         notifyDataSetChanged()
     }
 
-    fun getCards(): List<Card> {
+    fun getCards(): List<Recommendation> {
         return cards
     }
 
@@ -46,10 +42,10 @@ class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
             return
         }
 
-        val spot = cards[position]
-        holder.name.text = spot.user.name
-        holder.age.text = spot.user.age.toString()
-        holder.image.setImageBitmap(spot.bitmap)
+        val user = cards[position]
+        holder.name.text = user.name
+        holder.age.text = user.age.toString()
+        imageUtil.drawable(user.photos[0].url).into(holder.image)
     }
 
     override fun getItemCount(): Int {
