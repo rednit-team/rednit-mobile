@@ -69,7 +69,7 @@ class SwipeFragment : Fragment(), CardStackListener {
     }
 
     private fun setupCardStackView() {
-        manager.setStackFrom(StackFrom.Top)
+        manager.setStackFrom(StackFrom.None)
         manager.setVisibleCount(5)
         manager.setTranslationInterval(8.0f)
         manager.setScaleInterval(0.95f)

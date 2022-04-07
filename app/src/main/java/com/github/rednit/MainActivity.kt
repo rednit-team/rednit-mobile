@@ -1,6 +1,5 @@
 package com.github.rednit
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -12,8 +11,8 @@ import com.github.rednit.databinding.ActivityMainBinding
 import com.github.rednit.fragments.ChatFragment
 import com.github.rednit.fragments.HistoryFragment
 import com.github.rednit.fragments.SettingsFragment
-import com.github.rednit.swipe.SwipeFragment
 import com.github.rednit.likes.LikeFragment
+import com.github.rednit.swipe.SwipeFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,8 +74,6 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-
-        requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
