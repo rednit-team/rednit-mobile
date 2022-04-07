@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.github.rednit.R
-import com.github.rednit.TinderConnection
+import com.github.rednit.api.TinderConnection
 import com.github.rednit.util.ImageUtil
 
 class LikeAdapter(private val imageUtil: ImageUtil) :

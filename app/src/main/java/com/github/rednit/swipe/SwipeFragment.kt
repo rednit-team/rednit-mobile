@@ -10,7 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
-import com.github.rednit.TinderConnection
+import com.github.rednit.api.TinderConnection
 import com.github.rednit.databinding.FragmentSwipeBinding
 import com.github.rednit.util.ImageUtil
 import com.rednit.tinder4j.api.entities.user.swipeable.Recommendation
@@ -48,6 +48,7 @@ class SwipeFragment : Fragment(), CardStackListener {
         lifecycleScope.launch {
             val photos = mutableListOf<Recommendation>()
             withContext(Dispatchers.IO) { photos.addAll(connection.recommendations()) }
+            connection.endLoginPhase()
             adapter.updateContent(photos)
             binding.cardStackView.isVisible = true
             binding.progressBar.isVisible = false

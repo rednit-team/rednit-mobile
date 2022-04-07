@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.github.rednit.api.TinderConnection
 import com.github.rednit.databinding.ActivityMainBinding
 import com.github.rednit.fragments.ChatFragment
 import com.github.rednit.fragments.HistoryFragment

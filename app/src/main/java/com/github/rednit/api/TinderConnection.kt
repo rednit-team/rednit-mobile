@@ -1,4 +1,4 @@
-package com.github.rednit
+package com.github.rednit.api
 
 import androidx.lifecycle.ViewModel
 import com.rednit.tinder4j.api.TinderClient
@@ -16,6 +16,7 @@ class TinderConnection : ViewModel() {
     var token = ""
 
     private lateinit var client: TinderClient
+    private var rateLimiter = AppRateLimiter()
     private var likePreviews = emptyList<LikePreview>()
     private var teaserCount = 0
     private var teaserCountFetched = false
@@ -31,8 +32,12 @@ class TinderConnection : ViewModel() {
             ignored.printStackTrace()
             return false
         }
+        client.ratelimiter = rateLimiter
         return true
+    }
 
+    fun endLoginPhase() {
+        rateLimiter.loginPhase = false
     }
 
     fun recommendations(): List<Recommendation> {
