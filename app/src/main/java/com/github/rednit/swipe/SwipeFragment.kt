@@ -53,6 +53,7 @@ class SwipeFragment : Fragment(), CardStackListener {
             binding.cardStackView.isVisible = true
             binding.progressBar.isVisible = false
         }
+        binding.badgeContainer.bringToFront()
     }
 
     override fun onCardSwiped(direction: Direction) {
@@ -67,6 +68,20 @@ class SwipeFragment : Fragment(), CardStackListener {
                 binding.progressBar.isVisible = false
             }
         }
+        onCardCanceled()
+    }
+
+    override fun onCardDragging(direction: Direction?, ratio: Float) {
+        if (direction == Direction.Left) {
+            binding.imageSwipeLeft.isVisible = true
+        } else if (direction == Direction.Right) {
+            binding.imageSwipeRight.isVisible = true
+        }
+    }
+
+    override fun onCardCanceled() {
+        binding.imageSwipeLeft.isVisible = false
+        binding.imageSwipeRight.isVisible = false
     }
 
     private fun setupCardStackView() {
@@ -96,13 +111,7 @@ class SwipeFragment : Fragment(), CardStackListener {
     override fun onCardDisappeared(view: View, position: Int) {
     }
 
-    override fun onCardDragging(direction: Direction?, ratio: Float) {
-    }
-
     override fun onCardRewound() {
-    }
-
-    override fun onCardCanceled() {
     }
 
 }

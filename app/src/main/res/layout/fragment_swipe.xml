@@ -8,7 +8,41 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_centerInParent="true"
         android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/badge_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_swipe_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:visibility="invisible"
+                android:background="@drawable/ic_swipe_left"/>
+
+            <ImageView
+                android:id="@+id/image_swipe_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:visibility="invisible"
+                android:background="@drawable/ic_swipe_right"/>
+        </RelativeLayout>
+
+        <com.yuyakaido.android.cardstackview.CardStackView
+            android:id="@+id/card_stack_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:clipToPadding="false" />
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -19,14 +53,6 @@
             android:indeterminateTint="@color/secondaryVariant"
             android:indeterminateTintMode="src_atop"
             android:visibility="visible" />
-
-        <com.yuyakaido.android.cardstackview.CardStackView
-            android:id="@+id/card_stack_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_margin="30dp"
-            android:clipToPadding="false" />
 
     </RelativeLayout>
 
