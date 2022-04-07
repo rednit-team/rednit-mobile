@@ -12,4 +12,5 @@
     <string name="get_token">How do I get a X-Auth-Token?</string>
     <string name="no_likes">You haven\'t received any likes yet</string>
     <string name="wiki_token">"https://rednit.stoplight.io/docs/tinder-api/ZG9jOjIyMTk3ODgx-authentication"</string>
+    <string name="content_description">user image</string>
 </resources>

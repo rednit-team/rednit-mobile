@@ -11,15 +11,17 @@ import com.github.rednit.R
 import com.github.rednit.util.ImageUtil
 import com.rednit.tinder4j.api.entities.user.swipeable.Recommendation
 
-class CardStackAdapter(val imageUtil: ImageUtil) :
+class CardStackAdapter(private val imageUtil: ImageUtil) :
     RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
 
     private var cards = listOf<Recommendation>()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.text_name)
-        var age: TextView = view.findViewById(R.id.text_age)
-        var image: ImageView = view.findViewById(R.id.swipe_image)
+        val age: TextView = view.findViewById(R.id.text_age)
+        val distance: TextView = view.findViewById(R.id.text_distance)
+        val bio: TextView = view.findViewById(R.id.text_bio)
+        val image: ImageView = view.findViewById(R.id.swipe_image)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,6 +39,7 @@ class CardStackAdapter(val imageUtil: ImageUtil) :
         return cards
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (cards.isEmpty() || cards.size <= position) {
             return
@@ -45,6 +48,8 @@ class CardStackAdapter(val imageUtil: ImageUtil) :
         val user = cards[position]
         holder.name.text = user.name
         holder.age.text = user.age.toString()
+        holder.distance.text = user.distanceKm.toInt().toString() + " km"
+        holder.bio.text = user.bio
         imageUtil.drawable(user.photos[0].url).into(holder.image)
     }
 
