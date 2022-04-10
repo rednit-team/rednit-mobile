@@ -68,14 +68,20 @@ class SwipeFragment : Fragment(), CardStackListener {
                 binding.progressBar.isVisible = false
             }
         }
+        lifecycleScope.launch {
+            val dialog = MatchDialogFragment("61a88e9e521b470100fce7cd61e357f63b5fe50100f5c6a7")
+            dialog.show(parentFragmentManager, "matchDialog")
+        }
         onCardCanceled()
     }
 
     override fun onCardDragging(direction: Direction?, ratio: Float) {
         if (direction == Direction.Left) {
             binding.imageSwipeLeft.isVisible = true
+            binding.imageSwipeRight.isVisible = false
         } else if (direction == Direction.Right) {
             binding.imageSwipeRight.isVisible = true
+            binding.imageSwipeLeft.isVisible = false
         }
     }
 

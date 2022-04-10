@@ -2,7 +2,9 @@ package com.github.rednit.api
 
 import androidx.lifecycle.ViewModel
 import com.rednit.tinder4j.api.TinderClient
+import com.rednit.tinder4j.api.entities.Match
 import com.rednit.tinder4j.api.entities.user.LikePreview
+import com.rednit.tinder4j.api.entities.user.SelfUser
 import com.rednit.tinder4j.api.entities.user.swipeable.Recommendation
 import com.rednit.tinder4j.exceptions.LoginException
 
@@ -15,7 +17,7 @@ class TinderConnection : ViewModel() {
 
     var token = ""
 
-    private lateinit var client: TinderClient
+    lateinit var client: TinderClient
     private var rateLimiter = AppRateLimiter()
     private var likePreviews = emptyList<LikePreview>()
     private var teaserCount = 0
@@ -68,4 +70,13 @@ class TinderConnection : ViewModel() {
         }
         return likePreviews
     }
+
+    fun getMatch(id: String): Match {
+        return client.matchCacheView.getMatch(id).complete()
+    }
+
+    fun getSelfUser(): SelfUser {
+        return client.selfUser.complete()
+    }
+
 }

@@ -13,4 +13,8 @@
     <string name="no_likes">You haven\'t received any likes yet</string>
     <string name="wiki_token">"https://rednit.stoplight.io/docs/tinder-api/ZG9jOjIyMTk3ODgx-authentication"</string>
     <string name="content_description">user image</string>
+    <string name="match_title">It\'s a Match!</string>
+    <string name="match_open_chat">Open Chat</string>
+    <string name="match_delete">Delete Match</string>
+    <string name="match_keep_swiping">Keep Swiping</string>
 </resources>
