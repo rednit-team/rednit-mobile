@@ -7,6 +7,8 @@ import com.rednit.tinder4j.api.entities.user.LikePreview
 import com.rednit.tinder4j.api.entities.user.SelfUser
 import com.rednit.tinder4j.api.entities.user.swipeable.Recommendation
 import com.rednit.tinder4j.exceptions.LoginException
+import com.yuyakaido.android.cardstackview.Direction
+import java.util.*
 
 
 class TinderConnection : ViewModel() {
@@ -77,6 +79,16 @@ class TinderConnection : ViewModel() {
 
     fun getSelfUser(): SelfUser {
         return client.selfUser.complete()
+    }
+
+    fun swipe(direction: Direction, user: Recommendation) : Optional<String> {
+        if (direction == Direction.Left) {
+            user.dislike().complete()
+            return Optional.empty()
+        } else if (direction == Direction.Right) {
+            return user.like().complete()
+        }
+        return Optional.empty()
     }
 
 }

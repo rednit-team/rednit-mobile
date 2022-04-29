@@ -69,8 +69,13 @@ class SwipeFragment : Fragment(), CardStackListener {
             }
         }
         lifecycleScope.launch {
-            val dialog = MatchDialogFragment("61a88e9e521b470100fce7cd61e357f63b5fe50100f5c6a7")
-            dialog.show(parentFragmentManager, "matchDialog")
+            val match = withContext(Dispatchers.IO) {
+                connection.swipe(direction, adapter.getCards()[manager.topPosition - 1])
+            }
+            match.ifPresent {
+                val dialog = MatchDialogFragment(it)
+                dialog.show(parentFragmentManager, "matchDialog")
+            }
         }
         onCardCanceled()
     }
